@@ -30,15 +30,20 @@ public class UserController {
         }
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<LoginResponse> loginUser(@RequestBody LoginRequest request) {
-        try {
-            LoginResponse response = userService.login(request.getUserId(), request.getPassword());
-            return ResponseEntity.ok(response);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(LoginResponse.builder()
-                    .message(e.getMessage())
-                    .build());
-        }
-    }
+    /**
+     * JWT 이용하기 전 로그인 코드
+     *
+     * @Param LoginRequest : 로그인용 Dto
+     */
+//    @PostMapping("/login")
+//    public ResponseEntity<LoginResponse> loginUser(@RequestBody LoginRequest request) {
+//        try {
+//            LoginResponse response = userService.login(request.getUserId(), request.getPassword());
+//            return ResponseEntity.ok(response);
+//        } catch (IllegalArgumentException e) {
+//            return ResponseEntity.badRequest().body(LoginResponse.builder()
+//                    .message(e.getMessage())
+//                    .build());
+//        }
+//    }
 }

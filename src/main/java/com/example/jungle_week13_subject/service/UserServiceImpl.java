@@ -1,7 +1,7 @@
 package com.example.jungle_week13_subject.service;
 
 import com.example.jungle_week13_subject.domain.UserJpaEntity;
-import com.example.jungle_week13_subject.dto.LoginResponse;
+import com.example.jungle_week13_subject.jwt.JwtUtil;
 import com.example.jungle_week13_subject.repository.UserJpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,9 +12,11 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserJpaRepository userRepository;
+    private final JwtUtil jwtUtil;
 
-    public UserServiceImpl(UserJpaRepository userRepository) {
+    public UserServiceImpl(UserJpaRepository userRepository, JwtUtil jwtUtil) {
         this.userRepository = userRepository;
+        this.jwtUtil = jwtUtil;
     }
 
     @Transactional
@@ -37,10 +39,11 @@ public class UserServiceImpl implements UserService {
                 .build();
 
         userRepository.save(user);
+
     }
 
     @Override
-    public LoginResponse login(String userId, String password) {
+    public String login(String userId, String password) {
         // 유저 조회
         Optional<UserJpaEntity> user = userRepository.findByUserId(userId);
 
@@ -49,12 +52,7 @@ public class UserServiceImpl implements UserService {
         }
 
         // 로그인 성공
-        return LoginResponse.builder()
-                .userId(user.get().getUserId())
-                .nickname(user.get().getNickname())
-                .message("로그인 성공")
-                .build();
+        return jwtUtil.generateToken(user.get().getUserId());
     }
-
 
 }

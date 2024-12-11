@@ -9,4 +9,5 @@ public class User {
     private String userId;    // 로그인 ID
     private String password;  // 비밀번호
     private String nickname;  // 닉네임
+
 }

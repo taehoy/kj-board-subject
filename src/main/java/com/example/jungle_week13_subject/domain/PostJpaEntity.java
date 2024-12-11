@@ -1,9 +1,12 @@
 package com.example.jungle_week13_subject.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "posts")
@@ -27,4 +30,8 @@ public class PostJpaEntity {
 
     @Column(nullable = false)
     private String authorNickname;  // 작성자 닉네임
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<CommentJpaEntity> comments = new ArrayList<>();
 }

@@ -4,6 +4,7 @@ import com.example.jungle_week13_subject.dto.LoginRequest;
 import com.example.jungle_week13_subject.dto.LoginResponse;
 import com.example.jungle_week13_subject.jwt.JwtUtil;
 import com.example.jungle_week13_subject.service.UserService;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,8 +27,18 @@ public class AuthController {
     // 로그인
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
-        String token = userService.login(request.getUserId(), request.getPassword());
-        return ResponseEntity.ok(new LoginResponse(token));
+        try {
+            // JWT 토큰 생성
+            String token = userService.login(request.getUserId(), request.getPassword());
+
+            // JWT를 응답 헤더에 추가
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Authorization", token);
+
+            return ResponseEntity.ok().headers(headers).build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
 }

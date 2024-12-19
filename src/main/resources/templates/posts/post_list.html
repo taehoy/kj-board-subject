@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>게시글 목록</title>
+</head>
+<body>
+<h1>게시글 목록</h1>
+<a th:href="@{/posts/new}">새 게시글 작성</a>
+<ul>
+    <li th:each="post : ${posts}">
+        <a th:href="@{/posts/{id}(id=${post.id})}" th:text="${post.title}"></a>
+        <span th:text="'작성자: ' + ${post.authorNickname}"></span>
+    </li>
+</ul>
+<form th:action="@{/api/auth/logout}" method="post">
+    <button type="submit">로그아웃</button>
+</form>
+</body>
+</html>
